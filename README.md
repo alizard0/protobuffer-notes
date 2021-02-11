@@ -107,7 +107,9 @@ service Ping {
     rpc Ping returns (Pong) {}
 }
 
-message Pong {
+message PingRequest {}
+
+message Pong {      
     string message = 1;
 }
 ```
