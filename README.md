@@ -1,4 +1,4 @@
-# protobuffer-notes
+# protobuffer, grpc and quarkus
 > protocol buffers are a language for serializing structure data.
 
 ```protobuffer
