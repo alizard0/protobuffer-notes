@@ -20,6 +20,6 @@ public class PingController {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return client.ping(PingRequest.newBuilder().setMessage("ping").build()).getMessage();
+        return client.ping(PingRequest.newBuilder().build()).getMessage();
     }
 }

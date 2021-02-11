@@ -114,27 +114,47 @@ message Pong {
 }
 ```
 
-4. Generate classes using `mvn compile`
+4. Generate classes using `mvn compile`.
 
 5. On `application.properties`, you need to specify where we can find the service,
 ```properties
 quarkus.grpc.clients.ping.host=localhost
 ```
-5. Your service,
+
+6. Your reactive service,
 ```java
-@Path("/ping")
-public class PingResource {
-
-    @Inject
-    @GrpcService("ping")                     
-    PingRpc.PingBlockingStub client;   
-
-    @GET
-    @Path("/{name}")
-    public String hello(@PathParam("name") String name) {
-        return client.sayHello(HelloRequest.newBuilder().setName(name).build()).getMessage();  
+@Singleton
+public class ReactivePingService extends MutinyPingGrpc.PingImplBase {
+    @Override
+    public Uni<Pong> ping(PingRequest request) {
+        return Uni.createFrom().item(() ->
+                Pong.newBuilder().setMessage("pong").build());
     }
 }
+```
+
+7. Your controller,
+```java
+@Path("/ping")
+public class PingController {
+
+    @Inject
+    @GrpcService("ping")
+    PingGrpc.PingBlockingStub client;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return client.ping(PingRequest.newBuilder().build()).getMessage();
+    }
+}
+```
+
+8. Test your code:
+```bash
+$ mvn clean package
+$ java -jar target/*-runner.jar
+$ curl localhost:8080/ping
 ```
 
 ## Links

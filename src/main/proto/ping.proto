@@ -9,9 +9,7 @@ service Ping {
     rpc Ping (PingRequest) returns (Pong) {}
 }
 
-message PingRequest {
-    string message = 1;
-}
+message PingRequest {}
 
 message Pong {
     string message = 1;
